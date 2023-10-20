@@ -10,6 +10,23 @@ class Tree {
     constructor(array) {
         this.root = buildTree(array);
     }
+
+    insert(value, root = this.root) {
+        if (root === null) {
+            root = new Node(value);
+            return root;
+        }
+    
+        if (root.data === value) return;
+    
+        if (root.data < value) {
+            root.right = this.insert(value, root.right)
+        } else if (root.data > value) {
+            root.left = this.insert(value, root.left)
+        }
+    
+        return root;
+    }
 }
 
 function buildTree(array, start = 0, end = array.length - 1) {
@@ -26,24 +43,8 @@ function buildTree(array, start = 0, end = array.length - 1) {
 
 
 
-function insert(key) {
-    root = insertRec(root, key);
-}
 
-function insertRec(root, key) {
-    if (root == null) {
-        root = new Node(key);
-        return root;
-    }
-
-    if (key < root.key)
-        root.left = insertRec(root.left, key);
-    else if (key > root.key)
-        root.right = insertRec(root.right, key);
-
-    return root;
-}
-
+// Need to fix the delete
 function deleteNode(root, k) {
     if (root === null) {
         return root;
@@ -96,6 +97,7 @@ function find(value) {
 
 let testarray = new Tree ([1, 7, 4, 23, 9, 20, 3]);
 
-
+testarray.insert(10);
+deleteNode(testarray, 20);
 
 console.log(testarray);
