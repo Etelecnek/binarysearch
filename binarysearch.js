@@ -27,9 +27,67 @@ class Tree {
     
         return root;
     }
+
+    delete(value, root = this.root) {
+        if (root === null) {
+            return root;
+        }
+    
+        if (root.data > value) {
+            root.left = this.delete(value, root.left);
+            return root;
+        } else if (root.data < value) {
+            root.right = this.delete(value, root.right);
+            return root;
+        }
+
+        else {
+            if (root.left === null) {
+                return root.right
+            } else if (root.right === null) {
+                return root.left;
+            }
+
+            else {
+                const miniData = function findNextSmallestRightData(root) {
+                    let min = root.data;
+                    let newRoot = root;
+
+                    while (newRoot.left !== null) {
+                        min = root.left.data;
+                        newRoot = root.left;
+                    }
+
+                    return min
+                }
+
+                root.data = minData(root.right);
+
+                root.right = this.delete(root.data, root.right)
+            }
+        }
+
+        return root;
+    }
+
+    find(value, root = this.root) {
+        if (root === null || root.data === value) {
+            return root;
+        }
+
+        if (value < root.data) {
+            return this.find(value, root.left)
+        }
+        return this.find(value, root.right)
+    }
+}
+
+function sortAndRemoveDupes(array) {
+    const sorted = [...new Set(array.sort((a, b) => a - b))];
 }
 
 function buildTree(array, start = 0, end = array.length - 1) {
+    sortAndRemoveDupes(array)
     if (start > end) return null;
 
     const mid = parseInt((start + end) / 2);
@@ -41,63 +99,8 @@ function buildTree(array, start = 0, end = array.length - 1) {
     return root;
 }
 
-
-
-
-// Need to fix the delete
-function deleteNode(root, k) {
-    if (root === null) {
-        return root;
-    }
-
-    if (root.key > k) {
-        root.left = deleteNode(root.left, k);
-        return root;
-    } else if (root.key < k) {
-        root.right = deleteNode(root.right, k);
-        return root;
-    }
-
-    if (root.left === null) {
-        let temp = root.right;
-        delete root;
-        return temp;
-    } else if (root.right === null) {
-        let temp = root.left;
-        delete root;
-        return temp;
-    }
-
-    else {
-        let succParent = root;
-
-        let succ = root.right
-        while (succ.left !== null) {
-            succParent = succ;
-            succ = succ.left
-        }
-
-        if (succParent !== root) {
-            succParent.left = succ.right;
-        } else {
-            succParent.right = succ.right;
-        }
-
-        root.key = succ.key;
-
-        delete succ;
-        return root;
-    }
-}
-
-function find(value) {
-
-
-}
-
 let testarray = new Tree ([1, 7, 4, 23, 9, 20, 3]);
 
-testarray.insert(10);
-deleteNode(testarray, 20);
+
 
 console.log(testarray);
